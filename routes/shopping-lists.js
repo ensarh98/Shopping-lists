@@ -13,7 +13,8 @@ var shoppingLists = {
       client.query(
         `SELECT sl.*, CONCAT(c.first_name, ' ', c.last_name) as customer
         FROM shopping_lists sl 
-        JOIN customers c ON c.customer_id = sl.customer_id`,
+        JOIN customers c ON c.customer_id = sl.customer_id
+        ORDER BY sl.list_id ASC`,
         [],
         function (err, result) {
           done();

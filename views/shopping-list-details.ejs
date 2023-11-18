@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/css/main.css" />
+    <title>Shopping List Details</title>
+  </head>
+
+  <body class="container">
+    <div class="page-header header-container">
+      <h1>
+        Shopping List - <%= listDetails[0].list_name %><small
+          style="margin-left: 10px"
+        >
+          Customer: <%= listDetails[0].customer_name %></small
+        >
+      </h1>
+      <a class="btn btn-primary pull-right" href="<%= apiUrl %>/shopping-lists">
+        <span class="glyphicon glyphicon-chevron-left"></span>
+        Back
+      </a>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-md-4">
+        <h3>Available items</h3>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Item Name</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% availableItems.forEach(ai => { %>
+            <tr>
+              <td><%= ai.item_name %></td>
+              <td class="table-cell-right">
+                <a
+                  class="btn btn-success"
+                  href="<%= apiUrl %>/shopping-list-details/<%= listDetails[0].list_id %>/add/<%= ai.item_id %>"
+                  <% if (ai.available === false) { %>disabled onclick="return false;"<% } %>
+                  >
+                  <span class="glyphicon glyphicon-shopping-cart"></span>Buy
+                </a>
+              </td>
+            </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-xs-12 col-md-7 pull-right">
+        <h3>Added items</h3>
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>Item Name</th>
+              <th class="table-cell-right">Price (BAM)</th>
+              <th class="table-cell-right">Quantity</th>
+              <th class="table-cell-right">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (listItems.length > 0) { %> <% listItems.forEach(li => { %>
+            <tr>
+              <td><%= li.item_name %></td>
+              <td class="table-cell-right"><%= li.price %></td>
+              <td class="table-cell-right"><%= li.quantity %></td>
+              <td class="table-cell-right">
+                <%= (li.price * li.quantity).toFixed(2) %>
+              </td>
+            </tr>
+            <% }); %> <% } else { %>
+            <tr>
+              <td colspan="4" class="no-items-message">No items added yet.</td>
+            </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>
