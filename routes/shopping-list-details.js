@@ -46,7 +46,8 @@ var shoppingListDetails = {
       client.query(
         `select i.*,
         case when (select d.number_items from (select sli.item_id, count(*) as number_items from shopping_list_items sli where sli.list_id != $1 group by sli.item_id) d where d.item_id = i.item_id) >= 3 then false else true end as available 
-        from items i`,
+        from items i
+        order by i.item_name ASC`,
         [listId],
         function (err, result) {
           done();
@@ -71,7 +72,7 @@ var shoppingListDetails = {
         FROM shopping_list_items sli
         JOIN items i ON sli.item_id = i.item_id
         WHERE sli.list_id = $1
-        ORDER BY i.item_name ASC;
+        ORDER BY sli.list_item_id ASC;
         `,
         [listId],
         function (err, result) {
@@ -112,6 +113,53 @@ var shoppingListDetails = {
       );
     });
   },
+  removeItem: function (req, res, next) {
+    pool.connect(function (err, client, done) {
+      if (err) {
+        return res.send(err);
+      }
+      var listId = req.params.listId;
+      var itemId = req.params.itemId;
+
+      client.query(
+        `update shopping_list_items 
+        set quantity = case when quantity > 0 then quantity-1 else 0 end
+        where list_id =$1 and item_id = $2`,
+        [listId, itemId],
+        function (err, result) {
+          done();
+          if (err) {
+            return res.send(err.stack);
+          } else {
+            next();
+          }
+        }
+      );
+    });
+  },
+  deleteItem: function (req, res, next) {
+    pool.connect(function (err, client, done) {
+      if (err) {
+        return res.send(err);
+      }
+      var listId = req.params.listId;
+      var itemId = req.params.itemId;
+
+      client.query(
+        `delete from shopping_list_items 
+       where list_id = $1 and item_id = $2`,
+        [listId, itemId],
+        function (err, result) {
+          done();
+          if (err) {
+            return res.send(err.stack);
+          } else {
+            next();
+          }
+        }
+      );
+    });
+  },
 };
 
 router.get(
@@ -124,6 +172,22 @@ router.get(
 router.get(
   "/:listId/add/:itemId",
   shoppingListDetails.setItem,
+  shoppingListDetails.getAvailableItems,
+  shoppingListDetails.getListItems,
+  shoppingListDetails.getListDetails
+);
+
+router.get(
+  "/:listId/remove/:itemId",
+  shoppingListDetails.removeItem,
+  shoppingListDetails.getAvailableItems,
+  shoppingListDetails.getListItems,
+  shoppingListDetails.getListDetails
+);
+
+router.get(
+  "/:listId/delete/:itemId",
+  shoppingListDetails.deleteItem,
   shoppingListDetails.getAvailableItems,
   shoppingListDetails.getListItems,
   shoppingListDetails.getListDetails

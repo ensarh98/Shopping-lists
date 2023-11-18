@@ -58,3 +58,11 @@ button span {
 .no-items-message {
   text-align: center !important;
 }
+
+.btn-circle {
+  width: 25px;
+  height: 25px;
+  border-radius: 15px;
+  text-align: center;
+  padding: 3px;
+}
