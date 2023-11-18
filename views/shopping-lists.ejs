@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+    />
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/css/shopping-lists.css" />
+  </head>
+  <script>
+    $(document).ready(function () { 
+      $("#createListModal").on("show.bs.modal", function (e) {
+          userId = $(e.relatedTarget).data("user-id");
+          $(e.currentTarget).find('input[id="userId"]').val(userId);
+        });
+      });
+  </script>
+
+  <body>
+    <div class="table-container">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th colspan="3" class="table-heading"><span>Shopping Lists</span>
+              <a
+                class="btn btn-primary heading-button"
+                data-title="Create List"
+                data-toggle="modal"
+                data-target="#createListModal"
+                data-tooltip="tooltip"
+                data-placement="left"
+                title="Create List"
+                data-user-id="2"
+              >
+                <span
+                  class="glyphicon glyphicon-plus"
+                  style="margin-right: 10px"
+                ></span>Create
+              </a>
+            </th>
+          </tr>
+          <tr>
+            <th scope="col">Customer</th>
+            <th scope="col">List name</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <% if (lists) { lists.forEach(l => { %>
+          <tbody>
+            <tr>
+              <td><div><%= l.customer %></div></td>
+              <td><div><%= l.list_name %></div></td>
+              <td><button
+                type="submit"
+                class="btn btn-success btn-right"
+                id="DetailsBtn"
+              >
+                <span
+                  class="glyphicon glyphicon-list-alt"
+                  style="margin-right: 10px"
+                ></span
+                ><span>Details</span>
+              </button></td>
+            </tr>
+          </tbody>
+        <% })} %>
+      </table>
+    </div>
+  
+  
+    <div
+      class="modal fade create-list-modal"
+      id="createListModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="edit"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content" style="width: 400px">
+          <div class="modal-header create-list-modal-header">
+            <h4 style="width: 100%; color: white">Create List</h4>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div>
+              <form id="createListForm" action="<%=apiUrl%>shopping-lists/insert" method="POST">
+                <label for="listName">List name</label>
+                <input type="text" id="listName" name="listName" required>
+                <br />
+                <br />
+                <label for="customer_id">Choose a customer:</label>
+                <br />
+                <select name="customer_id" id="customer_id">
+                  <% if (customers) { customers.forEach(l => { console.log(l) %>
+                    <option value="<%= l.customer_id %>"><%= l.name %></option>
+                  <% })}; %>
+                </select>
+                
+                <div class="add-btn">
+                  <button type="submit" class="btn btn-success" id="createListBtn">
+                    <span class="glyphicon glyphicon-ok btn-icon-margine"></span>
+                    <span>Add List</span>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> 
+  </body>
+</html>
