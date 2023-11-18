@@ -18,7 +18,10 @@ CREATE TABLE shopping_lists (
 
 CREATE TABLE shopping_list_items (
   list_item_id SERIAL PRIMARY KEY,
-  list_id INTEGER REFERENCES shopping_lists(list_id),
+  list_id INTEGER REFERENCES shopping_lists(list_id) ON DELETE CASCADE,
   item_id INTEGER REFERENCES items(item_id),
   quantity INTEGER NOT NULL
 );
+
+ALTER TABLE shopping_list_items
+ADD CONSTRAINT unique_list_item_constraint UNIQUE (list_id, item_id);

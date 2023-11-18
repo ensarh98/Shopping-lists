@@ -21,7 +21,7 @@
           Customer: <%= listDetails[0].customer_name %></small
         >
       </h1>
-      <a class="btn btn-primary pull-right" href="<%= apiUrl %>/shopping-lists">
+      <a class="btn btn-primary pull-right" href="<%= apiUrl %>/">
         <span class="glyphicon glyphicon-chevron-left"></span>
         Back
       </a>
@@ -43,7 +43,7 @@
               <td class="table-cell-right">
                 <a
                   class="btn btn-success"
-                  href="<%= apiUrl %>/shopping-list-details/<%= listDetails[0].list_id %>/add/<%= ai.item_id %>"
+                  href="<%= apiUrl %>/details/<%= listDetails[0].list_id %>/add/<%= ai.item_id %>"
                   <% if (ai.available === false) { %>disabled onclick="return false;"<% } %>
                   >
                   <span class="glyphicon glyphicon-shopping-cart"></span>Buy
@@ -62,7 +62,7 @@
               <th>Item Name</th>
               <th class="table-cell-right">Price (BAM)</th>
               <th class="table-cell-right">Quantity</th>
-              <th class="table-cell-right">Total</th>
+              <th class="table-cell-right">Total (BAM)</th>
               <th></th>
             </tr>
           </thead>
@@ -78,7 +78,7 @@
               <td class="table-cell-right">
                 <a
                   class="btn btn-danger btn-circle"
-                  href="<%= apiUrl %>/shopping-list-details/<%= listDetails[0].list_id %>/<%= li.quantity == 1 ? 'delete' : 'remove' %>/<%= li.item_id %>"
+                  href="<%= apiUrl %>/details/<%= listDetails[0].list_id %>/<%= li.quantity == 1 ? 'delete' : 'remove' %>/<%= li.item_id %>"
                   >
                   <span class="glyphicon glyphicon-minus"></span>
                 </a>
@@ -89,9 +89,13 @@
               <td colspan="4" class="no-items-message">No items added yet.</td>
             </tr>
             <% } %>
+            <tr>
+              <td colspan="4" class="table-cell-right"><%=    listItems.map(li => li.price * li.quantity).reduce((accumulator, currentValue) => accumulator + currentValue, 0)  %></td>
+            </tr>
           </tbody>
         </table>
       </div>
+
     </div>
   </body>
 </html>

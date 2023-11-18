@@ -25,8 +25,8 @@ app.use(
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/shopping-lists", shoppingListsRouter);
-app.use("/shopping-list-details", shoppingListDetailsRouter);
+app.use("/", shoppingListsRouter);
+app.use("/details", shoppingListDetailsRouter);
 
 app.set("view engine", "ejs");
 app.disable("etag");

@@ -52,7 +52,7 @@ var shoppingLists = {
       );
     });
   },
-  insert: function (req, res, next) {
+  insertList: function (req, res, next) {
     pool.connect(async function (err, client, done) {
       if (err) {
         return res.send(err);
@@ -76,12 +76,38 @@ var shoppingLists = {
       );
     });
   },
+  deleteList: function (req, res, next) {
+    pool.connect(function (err, client, done) {
+      if (err) {
+        return res.send(err);
+      }
+      var listId = req.params.listId;
+      client.query(
+        `delete from shopping_lists where list_id = $1`,
+        [listId],
+        function (err, result) {
+          done();
+          if (err) {
+            return res.send(err.stack);
+          } else {
+            next();
+          }
+        }
+      );
+    });
+  },
 };
 
 router.get("/", shoppingLists.getAvailableCustomers, shoppingLists.getAll);
 router.post(
   "/insert",
-  shoppingLists.insert,
+  shoppingLists.insertList,
+  shoppingLists.getAvailableCustomers,
+  shoppingLists.getAll
+);
+router.get(
+  "/delete/:listId",
+  shoppingLists.deleteList,
   shoppingLists.getAvailableCustomers,
   shoppingLists.getAll
 );

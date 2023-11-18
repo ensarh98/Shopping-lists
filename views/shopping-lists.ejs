@@ -52,10 +52,16 @@
             <td><div><%= l.customer %></div></td>
             <td class="table-cell-right">
               <a
-                href="<%= apiUrl %>/shopping-list-details/<%= l.list_id %>"
+                href="<%= apiUrl %>/details/<%= l.list_id %>"
                 class="btn btn-primary"
               >
                 <span class="glyphicon glyphicon-list-alt"></span>Details
+              </a>
+              <a
+                class="btn btn-danger"
+                href="<%= apiUrl %>/delete/<%= l.list_id %>"
+              >
+                <span class="glyphicon glyphicon-trash"></span>Delete
               </a>
             </td>
           </tr>
@@ -93,7 +99,7 @@
             <div>
               <form
                 id="createListForm"
-                action="<%=apiUrl%>shopping-lists/insert"
+                action="<%=apiUrl%>/insert"
                 method="POST"
               >
                 <label for="listName">List name</label>
