@@ -90,7 +90,7 @@
             </tr>
             <% } %>
             <tr>
-              <td colspan="4" class="table-cell-right"><%=    listItems.map(li => li.price * li.quantity).reduce((accumulator, currentValue) => accumulator + currentValue, 0)  %></td>
+              <td colspan="4" class="table-cell-right"><%=    listItems.map(li => li.price * li.quantity).reduce((accumulator, currentValue) => accumulator + currentValue, 0).toFixed(2)  %></td>
             </tr>
           </tbody>
         </table>
