@@ -4,6 +4,7 @@ var path = require("path");
 var bodyParser = require("body-parser");
 
 var shoppingListsRouter = require("./routes/shopping-lists");
+var shoppingListDetailsRouter = require("./routes/shopping-list-details");
 
 require("dotenv").config();
 var app = express();
@@ -25,6 +26,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/shopping-lists", shoppingListsRouter);
+app.use("/shopping-list-details", shoppingListDetailsRouter);
 
 app.set("view engine", "ejs");
 app.disable("etag");
@@ -34,17 +36,14 @@ app.use(function (req, res, next) {
 });
 
 app.use(function (err, req, res, next) {
-  res.locals.message = err.message;
-  res.locals.error = req.app.get("env") === "development" ? err : {};
-
-  res.status(err.status || 500);
-  res.render("error");
+  console.error(err.stack);
+  res.status(500).render("error", { error: err });
 });
 
 const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
-  console.log(`Server radi na portu ${port}`);
+  console.log(`Server start on port ${port}`);
 });
 
 module.exports = app;
